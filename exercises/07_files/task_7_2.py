@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+
+with  open('config_sw1.txt', 'r') as f:
+      for line in f:
+          if 'alias' not in  line and '!' not in line:
+#              if startswith('alias') not in line:
+#                  print(line.split('|')[0])
+#              else: 
+                  print(line.rstrip())
+
+
 """
 Задание 7.2
 
@@ -39,3 +49,8 @@ interface Ethernet0/3
 ...
 
 """
+
+
+
+
+
