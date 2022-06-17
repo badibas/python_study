@@ -34,3 +34,19 @@
  '172.21.41.129', '172.21.41.130', '172.21.41.131', '172.21.41.132']
 
 """
+import ipaddress
+from pprint import pprint
+
+#def convert_ranges_to_ip_list(ip_list):
+ip_add = "192.168.100.10-15"
+ip_ad1 = ip_add.split('-')
+ip_start = ipaddress.ip_address(ip_ad1[0])
+ip_ad = ip_ad1[0].split('.')
+ip_stop = ipaddress.ip_address('.'.join(ip_ad[:3]+[ip_ad1[-1]]))
+#print(ip_start, ip_stop)
+
+#ip_addr = []
+ip_addr = ipaddress.ip_address(ip) for ip int range(int(ip_start), int(ip_stop)+1) 
+#for ip in range(int(ip_start), int(ip_stop)+1):
+#    ip_addr.append(ipaddress.ip_address(ip))
+pprint(ip_addr)

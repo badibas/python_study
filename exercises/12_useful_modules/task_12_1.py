@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
-"""
-Задание 12.1
 
-Создать функцию ping_ip_addresses, которая проверяет пингуются ли IP-адреса.
+from pprint import pprint
+import ipaddress
+import subprocess
 
-Функция ожидает как аргумент список IP-адресов.
+def ping_ip_address(ip):
+      reply = subprocess.run(
+              ['ping', '-c', '2', '-n', ip],
+               stdout=subprocess.DEVNULL
+               )
+      if reply.returncode == 0:
+           return True  
+      else:
+           return None
 
-Функция должна возвращать кортеж с двумя списками:
-* список доступных IP-адресов
-* список недоступных IP-адресов
+if __name__ == "__main__":
 
-Для проверки доступности IP-адреса, используйте команду ping (запуск ping через subprocess).
-IP-адрес считается доступным, если выполнение команды ping отработало с кодом 0 (returncode).
-Нюансы: на Windows returncode может быть равен 0 не только, когда ping был успешен,
-но для задания нужно проверять именно код. Это сделано для упрощения тестов.
-
-Ограничение: Все задания надо выполнять используя только пройденные темы.
-"""
+  ip_list = ("8.8.8.8", "192.168.160.1", "8.8.4.4", "10.178.255.10")
+  ip_ok = []
+  ip_no_ok = []  
+  for ip in ip_list:
+      status = ping_ip_address(ip)
+      if status:
+         ip_ok.append(ip)
+      else:
+         ip_no_ok.append(ip)
+  pprint("Доступные адреса {} Не доступные адреса {}".format(ip_ok, ip_no_ok))
