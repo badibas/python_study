@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from  pprint import  pprint
 
 trunk_mode_template = [
     "switchport mode trunk",
@@ -17,20 +18,22 @@ trunk_config_2 = {
     "FastEthernet0/15": [111, 130],
     "FastEthernet0/14": [117],
 }
-config_trunk = {}
-#def generate_trunk_config(intf_config, trunk_mode):
-for  intf, vlans in trunk_config.items():
-         config_trunk[intf] = {}
-         for interface in trunk_mode_template:
+
+def generate_trunk_config(intf_config, trunk_mode):
+   config_trunk = {}
+   for  intf, vlans in intf_config.items():
+           config_trunk[intf] = {}
+           items = []
+           for interface in trunk_mode:
              if  interface.endswith("allowed vlan"):
-                 config_trunk[intf] = "{} {}".format(interface, str(vlans).strip('[]'))
-#                 print("{} {}".format(interface, str(vlans).strip('[]')))
+                   items.append(" {} {}".format(interface, str(vlans).strip('[]')))
              else:
-                 config_trunk[intf] = interface
-#                print(f"{interface}")
+                   items.append(f" {interface}")
+             config_trunk[intf] = items
+   return config_trunk
 
-#                return(config_trunk)
-print(config_trunk)
 
-#generate_trunk_config(trunk_config, trunk_mode_template)
+result = generate_trunk_config(trunk_config, trunk_mode_template)
+pprint(result)
+
 #generate_trunk_config(trunk_config_2, trunk_mode_template)

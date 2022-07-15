@@ -1,4 +1,33 @@
 # -*- coding: utf-8 -*-
+from pprint import pprint
+
+result = {}
+
+
+with open("config_sw2.txt", "r") as f:
+     list_file = f.read()
+     cfg_section = list_file.split("!\n")
+#     pprint(output)
+     for section in cfg_section:
+#         pprint(section)
+         if section.startswith("interface Fast"):
+            section_lines = section.split("\n")
+            for line in section_lines:
+                if line.startswith("interface"):
+                   intf = line.split()[1]
+                   result[intf] = "VLAN1"
+#                   print(intf)
+                elif "allowed vlan" in line:
+                   trunk = line.split()[-1]
+                   result[intf] = trunk
+#                   print(trunk)
+                elif "access vlan" in line:
+                   access = line.split()[-1]
+                   result[intf] = access
+#                   print(access)
+
+pprint(result)
+
 """
 Задание 9.3a
 

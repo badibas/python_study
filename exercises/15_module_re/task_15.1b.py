@@ -31,32 +31,35 @@ from pprint import pprint
 
 regex = (
          r"interface (?P<intf>\S+)"
-         r"| ip address (?P<ip>\S+)"
-         r" (?P<mask>\S+)"
+         r" ip address (?P<ip_add>\S+) (?P<ip_mask>(\S+))"
+         r"| ip address (?P<ip_sec>\S+) (?P<mask_sec>\S+) \S+"
         )
 result = {}
-def get_ip_from_cfg(file):
-   with open(file) as f:
+#def get_ip_from_cfg(file):
+with open('config_r2.txt') as f:
        for line in f:
           match = re.search(regex, line)
           if match:
+#             print(match.group(2))
              if match.lastgroup == 'intf':
                 interface = match.group(match.lastgroup)
-                result[interface] = {}           
-             else:
-                result[interface] = match.group(2, 3)
-       return result
+                result[interface] = {}
+#             elif match.lastgroup == 'ip_sec':
+#                result[interface] == match.group(5)
+             else: 
+                 result[interface] =  match.group(match.lastgroup)
+       pprint(result)
 
 
-def clear_ip(config_file):
-  data = get_ip_from_cfg(config_file)
-  result = {}
-  for key, value in data.items():
-      if  data[key]:
-         result[key] = value
-  return result
+#def clear_ip(config_file):
+#  data = get_ip_from_cfg(config_file)
+#  result = {}
+#  for key, value in data.items():
+#      if  data[key]:
+#         result[key] = value
+#  return result
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
-   pprint(clear_ip("config_r2.txt"))
+#   pprint(get_ip_from_cfg("config_r2.txt"))
 

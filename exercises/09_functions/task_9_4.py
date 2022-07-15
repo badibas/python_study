@@ -1,66 +1,26 @@
 # -*- coding: utf-8 -*-
-"""
-Задание 9.4
-
-Создать функцию convert_config_to_dict, которая обрабатывает конфигурационный
-файл коммутатора и возвращает словарь:
-* Все команды верхнего уровня (глобального режима конфигурации), будут ключами.
-* Если у команды верхнего уровня есть подкоманды, они должны быть в значении
-  у соответствующего ключа, в виде списка (пробелы в начале строки надо удалить).
-* Если у команды верхнего уровня нет подкоманд, то значение будет пустым списком
-
-У функции должен быть один параметр config_filename, который ожидает
-как аргумент имя конфигурационного файла.
-
-Проверить работу функции на примере файла config_sw1.txt
-
-При обработке конфигурационного файла, надо игнорировать строки, которые начинаются
-с '!', а также строки в которых содержатся слова из списка ignore.
-
-Для проверки надо ли игнорировать строку, использовать функцию ignore_command.
-
-Часть словаря, который должна возвращать функция (полный вывод можно посмотреть
-в тесте test_task_9_4.py):
-{
-    "version 15.0": [],
-    "service timestamps debug datetime msec": [],
-    "service timestamps log datetime msec": [],
-    "no service password-encryption": [],
-    "hostname sw1": [],
-    "interface FastEthernet0/0": [
-        "switchport mode access",
-        "switchport access vlan 10",
-    ],
-    "interface FastEthernet0/1": [
-        "switchport trunk encapsulation dot1q",
-        "switchport trunk allowed vlan 100,200",
-        "switchport mode trunk",
-    ],
-    "interface FastEthernet0/2": [
-        "switchport mode access",
-        "switchport access vlan 20",
-    ],
-}
-
-Ограничение: Все задания надо выполнять используя только пройденные темы.
-"""
+from pprint import pprint
 
 ignore = ["duplex", "alias", "configuration"]
-
-
-def ignore_command(command, ignore):
-    """
-    Функция проверяет содержится ли в команде слово из списка ignore.
-
-    command - строка. Команда, которую надо проверить
-    ignore - список. Список слов
-
-    Возвращает
-    * True, если в команде содержится слово из списка ignore
-    * False - если нет
-    """
-    ignore_status = False
-    for word in ignore:
-        if word in command:
-            ignore_status = True
-    return ignore_status
+ign1, ign2, ign3  = ignore
+config = {}
+with open("config_sw1.txt", "r") as f:
+     for line in f:
+#         pprint(line)
+         if ('!' not in line) and (ign1  not  in  line) and (ign2 not in line) and (ign3 not in line):
+            line_config = line
+#            pprint(line)
+            if not  line_config.startswith(" "):
+                keys = line_config
+                config[keys] = {}
+            else:
+                config[keys] = line_config
+            pprint(config)
+#         else:
+#           config[line]=line
+#     pprint(config) 
+#def ignore_command(command, ignore):
+#    for word in ignore:
+#        if word in command:
+#            ignore_status = True
+#    return ignore_status

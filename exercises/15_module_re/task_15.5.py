@@ -30,20 +30,26 @@ description Connected to SW1 port Eth 0/1
 from pprint import pprint
 import re
 
-regex = re.compile(r"(?P<div>\S+) +(?P<loc>\w+ \S+) +.+ (?P<rem>\S+ \S+)")
+regex = re.compile(r"(?P<div>\S+) +(?P<loc>\w+ \S+) +.+ (?P<rem>\S+ \S+)", re.DOTALL | re.ASCII)
 
 def generate_description_from_cdp(file):
     with open(file) as f:
       result = {}
       for line in f:
-#        for word in re.split(r"  +", line):
+#         for word in re.split(r"  +", line):
 #         line =  re.split(r"  +", line)
-         match = re.match(regex, line)
+         match = regex.match(line)
          if match:
-           result[match.group('loc')] = match.group('div'), match.group('rem')
+           value = "description Connected to", match.group('div'), "port",  match.group('rem')
+           result[match.group('loc')] = value
+#           result[match.group('loc')] = "description Connected to", match.group('div'), "port", match.group('rem')
 #           print('{}: "description Connected to {} port {}" '.format(match.group('loc'), match.group('div'), match.group('rem')))
-      print(result)
+      return result
 
 
 
-generate_description_from_cdp("sh_cdp_n_sw1.txt")
+if __name__ == "__main__": 
+ 
+
+
+  pprint(generate_description_from_cdp("sh_cdp_n_sw1.txt"))
