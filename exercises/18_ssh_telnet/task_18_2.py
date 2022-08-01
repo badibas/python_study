@@ -45,4 +45,27 @@ R1#
 с помощью функции send_config_commands.
 """
 
-commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
+import netmiko
+from pprint import pprint
+import yaml
+
+def  send_config_commands(device, config_commands):
+    with netmiko.ConnectHandler(**device) as ssh:
+        ssh.enable()
+        return ssh.send_config_set(config_commands)
+   
+if __name__ == "__main__":
+    
+    commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
+
+    with open("devices.yaml") as f:
+        devices = yaml.safe_load(f)        
+
+#    r1 ={'device_type': 'cisco_ios',
+#        'ip': '192.168.100.1',
+#        'username': 'cisco',
+#        'password': 'cisco',
+#        'secret': 'cisco'}
+
+        for dev in devices:
+            print(send_config_commands(dev, commands))

@@ -18,6 +18,25 @@
 
 """
 import yaml
+import netmiko
+
+r1 = {
+     'device_type': 'cisco.ios',
+     'host': '192.168.100.1',
+     'username': 'cisco',
+     'password': 'cisco',
+     'secret': 'cisco',
+     }
+
+
+def send_show_command(device, command):
+
+    ssh = netmiko.Netmiko(**device)
+    ssh.enable()
+    return ssh.send_command(command)         
+    
+
+
 
 if __name__ == "__main__":
     command = "sh ip int br"
@@ -26,3 +45,4 @@ if __name__ == "__main__":
 
     for dev in devices:
         print(send_show_command(dev, command))
+

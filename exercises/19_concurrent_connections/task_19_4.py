@@ -105,3 +105,55 @@ R3#
 
 Для выполнения задания можно создавать любые дополнительные функции.
 """
+from netmiko import ConnectHandler
+from concurrent.futures import ThreadPoolExecutor
+
+import yaml
+
+def send_show(device_dict, command):
+     with ConnectHandler(**device_dict) as ssh:
+          ssh.enable()
+          result = ssh.send_command(command)
+     return result 
+
+def send_command(device_dict, command):
+      with ConnectHandler(**device_dict) as ssh:
+          ssh.enable()
+          result = send_config_set(command)
+      return result
+
+
+def send_commands_to_devices(devices, filename, show = False, config = False, limit = 3):
+   raise ValueError("Нельзя вводить одновленменно config and show")  
+
+   try:
+        if  show == True and config == False:
+           with ThredPoolExecutor(max_workers = limit) as executor:
+                future_list = []
+                for device in devices:
+                   future = executor.submit(send_show, devices, show)
+                   future_list.append(future)
+                for f in future_list:
+                    print(f.result())
+        elif show == False and config == True:
+            with ThredPoolExecutor(max_workers = limit) as executor:
+                future_list = []
+                for device in devices:
+                    future = executor.map(send_command, devices, config)
+                    future_list.append(future)
+                for f in future_list:
+                    print(f.result()) 
+   except:
+          ValueError  
+
+
+if __name__ == "__main__":
+
+   r1 = {'device_type': 'cisco_ios',
+     'host': '192.168.100.1',
+     'username': 'cisco',
+     'password': 'cisco',
+     'secret': 'cisco'}
+
+
+   send_commands_to_devices(r1, "result_task19_4.txt", 'show clock', config = ["router ospf 55", "exit"])
